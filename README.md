@@ -19,12 +19,11 @@ This python project uses pipenv so after cloning the repo you will need to insta
 git clone https://github.com/joncutrer/pydweetserver.git
 cd pydweetserver
 pipenv install
-pipenv run python pydweetserver/app.py
 
 ```
 # How to use it
 
-By default the REST API webserver will be running port 5000
+By default the REST API webserver starts on port 5000
 
 ### Start the server...
 
@@ -32,19 +31,21 @@ By default the REST API webserver will be running port 5000
 pipenv run python pydweetserver/app.py
 ```
 
-browse to http://localhost:5000/
+Open http://localhost:5000/ to insure its runnning
 
 ### Dweet something
 
 http://localhost:5000/dweet/for/mything?foo=bar&temp=40&humidity=30
 
 
-### Fetch the latest data for your thing
+### Fetch the latest Dweet
 
 http://localhost:5000/get/latest/dweet/for/mything
+
+### Browse all your Dweets
 
 There is a simple UI that will let you see you dweeted things
 
 http://localhost:5000/see
 
-The project aims to get API compatible with dweet.io, See: https://dweet.io/play/
+The project aims to be API compatible with dweet.io, See: https://dweet.io/play/
