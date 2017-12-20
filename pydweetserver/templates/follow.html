@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+	<div id="headerwrap">
+	    <div class="container">
+	        <div class="row" style="padding-bottom:20px">
+	        	<div class="col-md-6">
+							<h1 id="thing-name">{{dweet.thing}}</h1>
+
+							<div id="last-updated">Here's what this thing was up to [time words|a few seconds ago, ## minutes ago, ## hours ago, ## days ago]</div>
+						</div>
+	        </div>
+	    </div>
+	</div>
+<div class="container">
+	<table class="table">
+		<thead>
+				<tr>
+					<th scope="col">Key</th>
+					<th scope="col">Value</th>
+				</tr>
+		</thead>
+		<tbody>
+	  {% for key, value in dweet.content.items() %}
+	    <tr>
+	    	<td>{{ key|e }}</td>
+	    	<td>{{ value|e }}</td>
+	    </tr>
+	  {% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+.navbar-brand {
+    font-family: 'Helvetica-Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 900;
+    padding: 0.1em 0.72em;
+    line-height: 1.7em;
+    border: solid 0.2em #fff;
+    letter-spacing: -1px;
+    font-size: 18px;
+    margin: 0;
+    display: inline-block;
+    color: white;
+}
+
+
+nav.bg-dark {
+    background-color: #3498db!important;
+}
+
+.navbar-dark .navbar-nav a.nav-link {
+    color: rgba(255,255,255,1);
+}
+
+#headerwrap {
+    background-color: #3498db;
+    color: white;
+    margin-top: -60px;
+    padding-top: 100px;
+}
+
+#headerwrap h1 {
+    margin-bottom: 15px;
+    font-size: 45px;
+    font-weight: 300;
+    letter-spacing: -2px;
+}
+
+.ms {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}

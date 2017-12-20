@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block body %}
+	<div id="headerwrap">
+	    <div class="container">
+	        <div class="row">
+	            <h1 class="col-lg-12">
+	                What's dweeting now?
+	            </h1>
+	        </div>
+	    </div>
+	</div>
+	<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Thing</th>
+					<th scope="col">What's it Talkin' About?</th>
+					<th scope="col">Last Heard From</th>
+				</tr>
+			</thead>
+			<tbody>
+		  {% for dweet in dweets %}
+		    <tr>
+		    	<td><a href="/follow/{{dweet.thing}}">{{ dweet.thing|truncate(64, False, '...', 0) }}</a></td>
+		    	<td>
+		    		{% set comma = joiner(",") %}
+						{% for item in dweet.content %}
+						    {{ comma() }}{{ item }}
+						{% endfor %} 
+		    	</td>
+		    	<td>{{ dweet.created }}</td>
+		    </tr>
+		  {% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
