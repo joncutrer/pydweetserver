@@ -3,8 +3,10 @@ from flask_restful import Resource, Api
 import flask_pymongo
 from flask_pymongo import PyMongo
 from datetime import datetime
+import maya
 import time
 import uuid
+import json
 
 
 app = Flask(__name__)
@@ -12,6 +14,10 @@ api = Api(app)
 
 app.config['MONGO_DBNAME'] = 'pydweetserver'
 mongo = PyMongo(app)
+
+# Utility Date Formatting
+def datefixup(datetime):
+    return maya.MayaDT.from_iso8601(datetime).iso8601()
 
 # Serve the HTML Docs [Human Interface]
 @app.route('/docs/')
@@ -35,7 +41,16 @@ def dweet_index():
 @app.route('/follow/<string:thing>')
 def dweet_follow(thing):
     dweet = mongo.db.dweets.find_one({'thing': thing})
-    return render_template('follow.html', dweet=dweet)
+
+    dweet["created"] = datefixup(dweet["created"])
+    dweet.pop('_id', None)
+
+    extra = {
+        'slang_time': maya.MayaDT.from_iso8601(dweet["created"]).slang_time(),
+        'raw_json': json.dumps(dweet["content"], sort_keys=True, indent=2)
+    }
+
+    return render_template('follow.html', dweet=dweet,extra=extra)
 
 # Serve Dweet add [Human Interface]
 @app.route('/add')
@@ -50,7 +65,7 @@ class Root(Resource):
             'server': 'pydweetserver', 
             'description': 'Dweet.io API Compliant REST Web Server written in Python/Flask/MongoDB', 
             'url': 'https://github.com/joncutrer/pydweetserver',
-            'version': '0.0.1',
+            'version': '0.0.3',
             'author': 'Jonathan Cutrer',
             'docs': '/docs'
         }
@@ -91,6 +106,8 @@ class DweetFor(Resource):
         #Insert the thing in history database
         mongo.db.history.insert_one( archivething )
 
+        newthing["created"] = datefixup(newthing["created"])
+
         # response
         return {
             'this': 'succeeded',
@@ -122,6 +139,7 @@ class GetLatestDweetFor(Resource):
         
         dweet.pop('_id', None)
         dweet.pop('transaction', None)
+        dweet["created"] = datefixup(dweet["created"])
 
         # response
         return {
@@ -139,6 +157,7 @@ class GetDweetsFor(Resource):
         for dweet in mongo.db.history.find({'thing': thing}).sort("created", flask_pymongo.DESCENDING):
             dweet.pop('_id', None)
             dweet.pop('transaction', None)
+            dweet["created"] = datefixup(dweet["created"])
             dweets.append(dweet)
 
         # no thing found
