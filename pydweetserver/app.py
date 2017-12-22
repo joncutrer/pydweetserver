@@ -1,5 +1,6 @@
 from flask import Flask, request, send_from_directory, render_template
 from flask_restful import Resource, Api
+import flask_pymongo
 from flask_pymongo import PyMongo
 from datetime import datetime
 import time
@@ -64,6 +65,7 @@ class CaughtEmptyDweet(Resource):
             'because': 'we couldn\'t find this'
         }
 
+
 class DweetFor(Resource):
     def get(self, thing):
 
@@ -100,12 +102,14 @@ class DweetFor(Resource):
     def post(self): 
         return {'todo': 'set some data via post'}
 
+
 class DweetQuietlyFor(Resource):
     def get(self, thing):
         msg = 'set some data for thing named ' + thing
         return {'todo': msg }
     def post(self):
         return {'todo': 'set some data via post'}
+
 
 class GetLatestDweetFor(Resource):
     def get(self, thing):
@@ -118,12 +122,35 @@ class GetLatestDweetFor(Resource):
         
         dweet.pop('_id', None)
         dweet.pop('transaction', None)
+
         # response
         return {
             'this': 'succeeded',
             'by': 'getting',
             'the': 'dweets',
             'with': dweet
+        }
+
+
+class GetDweetsFor(Resource):
+    def get(self, thing):
+
+        dweets = []
+        for dweet in mongo.db.history.find({'thing': thing}).sort("created", flask_pymongo.DESCENDING):
+            dweet.pop('_id', None)
+            dweet.pop('transaction', None)
+            dweets.append(dweet)
+
+        # no thing found
+        if not dweets:
+            return {"this":"failed","with":404,"because":"we couldn't find this"}
+        
+        # response
+        return {
+            'this': 'succeeded',
+            'by': 'getting',
+            'the': 'dweets',
+            'with': dweets
         }
 
 
@@ -134,7 +161,7 @@ api.add_resource(CaughtEmptyDweet, '/dweet/for/')
 api.add_resource(DweetFor, '/dweet/for/<string:thing>')
 api.add_resource(DweetQuietlyFor, '/dweet/quietly/for/<string:thing>')
 api.add_resource(GetLatestDweetFor, '/get/latest/dweet/for/<string:thing>')
-#api.add_resource(GetDweetsFor, '/get/dweets/for/<string:thing>')
+api.add_resource(GetDweetsFor, '/get/dweets/for/<string:thing>')
 #api.add_resource(ListenForDweetsForm, '/listen/for/dweets/form/<string:thing>')
 
 # end routes

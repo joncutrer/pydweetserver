@@ -13,6 +13,7 @@ jsonify = "*"
 flask-restful = "*"
 requests = "*"
 flask-limiter = "*"
+maya = "*"
 
 
 [dev-packages]
