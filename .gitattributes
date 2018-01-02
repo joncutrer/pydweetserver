@@ -1,0 +1,3 @@
+pydweetserver/static/* linguist-vendored
+pydweetserver/templates/* linguist-vendored
+pydweetserver/docs/* linguist-vendored
